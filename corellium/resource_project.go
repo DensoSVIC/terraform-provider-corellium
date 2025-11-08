@@ -118,6 +118,8 @@ type V1ProjectModel struct { // TODO: add quotas_used model to the schema.
 	CreatedAt types.String `tfsdk:"created_at"`
 	// UpdatedAt is the project last update date.
 	UpdatedAt types.String `tfsdk:"updated_at"`
+	// VPNConfig is the project's VPN configuration
+	VPNConfig types.String `tfsdk:"vpn_config"`
 }
 
 // Metadata returns the resource type name.
