@@ -7,13 +7,14 @@ import (
 	"net/http"
 	"os"
 
+	"terraform-provider-corellium/corellium/pkg/api"
+
 	"github.com/aimoda/go-corellium-api-client"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"terraform-provider-corellium/corellium/pkg/api"
 )
 
 // Ensure the implementation satisfies the expected interfaces.
@@ -190,50 +191,50 @@ func (d *CorelliumV1ImageResource) Create(ctx context.Context, req resource.Crea
 
 // Read refreshes the Terraform state with the latest data.
 func (d *CorelliumV1ImageResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state V1ImageModel
+	// var state V1ImageModel
 
-	diags := req.State.Get(ctx, &state)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	// diags := req.State.Get(ctx, &state)
+	// resp.Diagnostics.Append(diags...)
+	// if resp.Diagnostics.HasError() {
+	// 	return
+	// }
 
-	auth := context.WithValue(ctx, corellium.ContextAccessToken, api.GetAccessToken())
-	// auth is the context with the access token, what is required by the API client.
-	image, r, err := d.client.ImagesApi.V1GetImage(auth, state.Id.ValueString()).Execute()
-	if err != nil {
-		b, err := io.ReadAll(r.Body)
-		if err != nil {
-			resp.Diagnostics.AddError(
-				"Error reading image",
-				"Coudn't read the response body: "+err.Error(),
-			)
-			return
-		}
+	// auth := context.WithValue(ctx, corellium.ContextAccessToken, api.GetAccessToken())
+	// // auth is the context with the access token, what is required by the API client.
+	// image, r, err := d.client.ImagesApi.V1GetImage(auth, state.Id.ValueString()).Execute()
+	// if err != nil {
+	// 	b, err := io.ReadAll(r.Body)
+	// 	if err != nil {
+	// 		resp.Diagnostics.AddError(
+	// 			"Error reading image",
+	// 			"Coudn't read the response body: "+err.Error(),
+	// 		)
+	// 		return
+	// 	}
 
-		resp.Diagnostics.AddError(
-			"Unable to read image",
-			"An unexpected error was encountered trying to read the image:\n\n"+string(b))
-		return
-	}
+	// 	resp.Diagnostics.AddError(
+	// 		"Unable to read image",
+	// 		"An unexpected error was encountered trying to read the image:\n\n"+string(b))
+	// 	return
+	// }
 
-	state.Status = types.StringValue(image.GetStatus())
-	state.Id = types.StringValue(image.GetId())
-	state.Name = types.StringValue(image.GetName())
-	state.Type = types.StringValue(image.GetType())
-	state.Filename = types.StringValue(state.Filename.ValueString())
-	state.Encapsulated = types.BoolValue(state.Encapsulated.ValueBool())
-	state.Uniqueid = types.StringValue(image.GetUniqueid())
-	state.Size = types.NumberValue(big.NewFloat(float64(image.GetSize())))
-	state.Project = types.StringValue(image.GetProject())
-	state.CreatedAt = types.StringValue(image.GetCreatedAt().String())
+	// state.Status = types.StringValue(image.GetStatus())
+	// state.Id = types.StringValue(image.GetId())
+	// state.Name = types.StringValue(image.GetName())
+	// state.Type = types.StringValue(image.GetType())
+	// state.Filename = types.StringValue(state.Filename.ValueString())
+	// state.Encapsulated = types.BoolValue(state.Encapsulated.ValueBool())
+	// state.Uniqueid = types.StringValue(image.GetUniqueid())
+	// state.Size = types.NumberValue(big.NewFloat(float64(image.GetSize())))
+	// state.Project = types.StringValue(image.GetProject())
+	// state.CreatedAt = types.StringValue(image.GetCreatedAt().String())
 
-	diags = resp.State.Set(ctx, &state)
+	// diags = resp.State.Set(ctx, &state)
 
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	// resp.Diagnostics.Append(diags...)
+	// if resp.Diagnostics.HasError() {
+	// 	return
+	// }
 }
 
 // Update updates the resource and sets the updated Terraform state on success.
@@ -243,31 +244,33 @@ func (d *CorelliumV1ImageResource) Update(ctx context.Context, req resource.Upda
 
 // Delete deletes the resource and removes the Terraform state on success.
 func (d *CorelliumV1ImageResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state V1ImageModel
+	// NOTICE: In this case, because the created image is ephemeral and is already deleted after being used, there is no need to delete
 
-	diags := req.State.Get(ctx, &state)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	// var state V1ImageModel
 
-	auth := context.WithValue(ctx, corellium.ContextAccessToken, api.GetAccessToken())
-	r, err := d.client.ImagesApi.V1DeleteImage(auth, state.Id.ValueString()).Execute()
-	if err != nil {
-		b, err := io.ReadAll(r.Body)
-		if err != nil {
-			resp.Diagnostics.AddError(
-				"Error deleting image",
-				"Coudn't read the response body: "+err.Error(),
-			)
-			return
-		}
+	// diags := req.State.Get(ctx, &state)
+	// resp.Diagnostics.Append(diags...)
+	// if resp.Diagnostics.HasError() {
+	// 	return
+	// }
 
-		resp.Diagnostics.AddError(
-			"Unable to delete image",
-			"An unexpected error was encountered trying to delete the image:\n\n"+string(b))
-		return
-	}
+	// auth := context.WithValue(ctx, corellium.ContextAccessToken, api.GetAccessToken())
+	// r, err := d.client.ImagesApi.V1DeleteImage(auth, state.Id.ValueString()).Execute()
+	// if err != nil {
+	// 	b, err := io.ReadAll(r.Body)
+	// 	if err != nil {
+	// 		resp.Diagnostics.AddError(
+	// 			"Error deleting image",
+	// 			"Coudn't read the response body: "+err.Error(),
+	// 		)
+	// 		return
+	// 	}
+
+	// 	resp.Diagnostics.AddError(
+	// 		"Unable to delete image",
+	// 		"An unexpected error was encountered trying to delete the image:\n\n"+string(b))
+	// 	return
+	// }
 }
 
 // Configure adds the provider configured client to the resource.
