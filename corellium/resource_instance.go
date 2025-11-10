@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"terraform-provider-corellium/corellium/pkg/api"
+
 	"github.com/aimoda/go-corellium-api-client"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -13,7 +15,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
-	"terraform-provider-corellium/corellium/pkg/api"
 )
 
 // Ensure the implementation satisfies the expected interfaces.
@@ -358,6 +359,7 @@ func (d *CorelliumV1InstanceResource) Schema(_ context.Context, _ resource.Schem
 			},
 			"fwpackage": schema.StringAttribute{
 				Description: "Instance fwpackage",
+				Optional:    true,
 				Computed:    true,
 			},
 			"os": schema.StringAttribute{
@@ -489,6 +491,7 @@ func (d *CorelliumV1InstanceResource) Create(ctx context.Context, req resource.C
 
 	i := corellium.NewInstanceCreateOptions(plan.Flavor.ValueString(), plan.Project.ValueString(), plan.OS.ValueString())
 	i.SetName(plan.Name.ValueString())
+	i.SetFwpackage(plan.FWPackage.ValueString())
 	created, r, err := d.client.InstancesApi.V1CreateInstance(auth).InstanceCreateOptions(*i).Execute()
 	if err != nil {
 		if r.StatusCode == http.StatusForbidden {
@@ -650,8 +653,10 @@ func (d *CorelliumV1InstanceResource) Create(ctx context.Context, req resource.C
 	plan.Panicked = types.BoolValue(instance.GetPanicked())
 	plan.Created = types.StringValue(instance.GetCreated().UTC().String())
 	plan.Model = types.StringValue(instance.GetModel())
-	plan.FWPackage = types.StringValue(instance.GetFwpackage())
 	plan.OS = types.StringValue(instance.GetOs())
+	if plan.FWPackage.IsNull() {
+		plan.FWPackage = types.StringValue(instance.GetFwpackage())
+	}
 	plan.Agent = &V1InstanceAgentModel{
 		Hash: types.StringValue(instance.Agent.Get().GetHash()),
 		Info: types.StringValue(instance.Agent.Get().GetInfo()),
