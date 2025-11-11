@@ -2,9 +2,10 @@ package corellium
 
 import (
 	"context"
+	"math/big"
 	"net/http"
 
-	"github.com/aimoda/go-corellium-api-client"
+	"github.com/DensoSVIC/go-corellium-api-client"
 	"github.com/hashicorp/go-uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -109,6 +110,11 @@ func (d *V1InstancesDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 							Description: "Instance boot options",
 							Computed:    true,
 							Attributes: map[string]schema.Attribute{
+								"cores": schema.NumberAttribute{
+									Description: "Instance cores",
+									Optional:    true,
+									Computed:    true,
+								},
 								"boot_args": schema.StringAttribute{
 									Description: "Instance boot args",
 									Computed:    true,
@@ -330,6 +336,7 @@ func (d *V1InstancesDataSource) Read(ctx context.Context, req datasource.ReadReq
 		}
 
 		state.Instances[i].BootOptions = &V1InstanceBootOptionsModel{
+			Cores:           types.NumberValue(big.NewFloat(float64(instance.BootOptions.GetCores()))),
 			BootArgs:        types.StringValue(instance.BootOptions.GetBootArgs()),
 			RestoreBootArgs: types.StringValue(instance.BootOptions.GetRestoreBootArgs()),
 			UDID:            types.StringValue(instance.BootOptions.GetUdid()),

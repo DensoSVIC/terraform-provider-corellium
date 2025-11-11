@@ -6,7 +6,7 @@ import (
 	"math/big"
 	"net/http"
 
-	"github.com/aimoda/go-corellium-api-client"
+	"github.com/DensoSVIC/go-corellium-api-client"
 	"github.com/hashicorp/go-uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -191,6 +191,10 @@ func (d *V1ProjectsDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 								},
 							},
 						},
+						"vpn_config": schema.StringAttribute{
+							Description: "Project VPN config",
+							Computed:    true,
+						},
 						"created_at": schema.StringAttribute{
 							Description: "Project created at",
 							Computed:    true,
@@ -304,6 +308,30 @@ func (d *V1ProjectsDataSource) Read(ctx context.Context, req datasource.ReadRequ
 			state.Projects[i].Keys[j].CreatedAt = types.StringValue(key.GetCreatedAt().String())
 			state.Projects[i].Keys[j].UpdatedAt = types.StringValue(key.GetUpdatedAt().String())
 		}
+
+		diags = resp.State.Set(ctx, &state)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+
+		vpnConfig, r, err := d.client.ProjectsApi.V1GetProjectVpnConfig(auth, project.Id, "ovpn").Execute()
+		if err != nil {
+			b, err := io.ReadAll(r.Body)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Error reading the project VPN config",
+					"Coudn't read the response body: "+err.Error(),
+				)
+				return
+			}
+
+			resp.Diagnostics.AddError(
+				"Unable to read project VPN config",
+				"An unexpected error was encountered trying to read the project VPN config from the project:\n\n"+string(b))
+			return
+		}
+		state.Projects[i].VPNConfig = types.StringValue(vpnConfig)
 
 		diags = resp.State.Set(ctx, &state)
 		resp.Diagnostics.Append(diags...)

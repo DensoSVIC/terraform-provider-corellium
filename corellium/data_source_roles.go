@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/aimoda/go-corellium-api-client"
+	"github.com/DensoSVIC/go-corellium-api-client"
 	"github.com/hashicorp/go-uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -41,7 +41,7 @@ type V1RoleModel struct {
 }
 
 // V1RolesModel maps the data source schema data.
-// https://github.com/aimoda/go-corellium-api-client/blob/main/docs/RolesApi.md#v1roles
+// https://github.com/DensoSVIC/go-corellium-api-client/blob/main/docs/RolesApi.md#v1roles
 type V1RolesModel struct {
 	// Id is the data source required Id.
 	// Each data source should has a Id.

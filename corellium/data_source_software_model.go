@@ -11,7 +11,7 @@ import (
 
 	"terraform-provider-corellium/corellium/pkg/api"
 
-	"github.com/aimoda/go-corellium-api-client"
+	"github.com/DensoSVIC/go-corellium-api-client"
 	"github.com/hashicorp/go-uuid"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"

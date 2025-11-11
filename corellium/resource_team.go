@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/aimoda/go-corellium-api-client"
+	"github.com/DensoSVIC/go-corellium-api-client"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -28,14 +28,14 @@ type CorelliumV1TeamResource struct {
 	client *corellium.APIClient
 }
 
-// https://github.com/aimoda/go-corellium-api-client/blob/main/docs/User.md
+// https://github.com/DensoSVIC/go-corellium-api-client/blob/main/docs/User.md
 type V1TeamUserModel struct {
 	// Id is the user ID.
 	Id types.String `tfsdk:"id"`
 }
 
 // V1TeamModel maps the resource schema data.
-// https://github.com/aimoda/go-corellium-api-client/blob/main/docs/Team.md
+// https://github.com/DensoSVIC/go-corellium-api-client/blob/main/docs/Team.md
 type V1TeamModel struct {
 	// Id is the team ID.
 	Id types.String `tfsdk:"id"`

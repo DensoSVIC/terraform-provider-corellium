@@ -15,6 +15,6 @@ func main() {
 		// specific Terraform CLI configuration for manual development testing
 		// of this provider.
 		// Address: "registry.terraform.io/hashicorp/hashicups",
-		Address: "registry.terraform.io/aimoda/corellium",
+		Address: "registry.terraform.io/DensoSVIC/corellium",
 	})
 }

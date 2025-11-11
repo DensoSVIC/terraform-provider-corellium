@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/aimoda/go-corellium-api-client"
+	"github.com/DensoSVIC/go-corellium-api-client"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -97,7 +97,7 @@ type V1ProjectKeyModel struct {
 }
 
 // V1ProjectModel maps the resource schema data.
-// https://github.com/aimoda/go-corellium-api-client/blob/main/docs/Project.md
+// https://github.com/DensoSVIC/go-corellium-api-client/blob/main/docs/Project.md
 type V1ProjectModel struct { // TODO: add quotas_used model to the schema.
 	// Id is the project ID.
 	// The project ID is a uuid, universally unique identifier.
@@ -118,6 +118,8 @@ type V1ProjectModel struct { // TODO: add quotas_used model to the schema.
 	CreatedAt types.String `tfsdk:"created_at"`
 	// UpdatedAt is the project last update date.
 	UpdatedAt types.String `tfsdk:"updated_at"`
+	// VPNConfig is the project's VPN configuration
+	VPNConfig types.String `tfsdk:"vpn_config"`
 }
 
 // Metadata returns the resource type name.

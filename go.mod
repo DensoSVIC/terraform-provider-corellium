@@ -1,10 +1,10 @@
-// module github.com/aimoda/terraform-provider-corellium
+// module github.com/DensoSVIC/terraform-provider-corellium
 module terraform-provider-corellium
 
 go 1.24.3
 
 require (
-	github.com/aimoda/go-corellium-api-client v0.0.0-20230416012942-39f2f87fa661
+	github.com/DensoSVIC/go-corellium-api-client v0.0.0-20251111211627-8ae2622f82e4
 	github.com/gruntwork-io/terratest v0.49.0
 	github.com/hashicorp/terraform-plugin-framework v1.2.0
 	github.com/hashicorp/terraform-plugin-framework-validators v0.10.0
@@ -66,7 +66,7 @@ require (
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
-	github.com/stretchr/testify v1.10.0 // indirect
+	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/tmccombs/hcl2json v0.6.4 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/vmihailenco/msgpack v4.0.4+incompatible // indirect
@@ -81,4 +81,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-// replace github.com/aimoda/go-corellium-api-client => ./corellium-api-client
+// replace github.com/andy-fixstars/go-corellium-api-client-old => ./corellium-api-client
