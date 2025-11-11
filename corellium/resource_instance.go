@@ -7,11 +7,6 @@ import (
 	"net/http"
 	"time"
 
-<<<<<<< Updated upstream
-	"terraform-provider-corellium/corellium/pkg/api"
-
-=======
->>>>>>> Stashed changes
 	"github.com/DensoSVIC/go-corellium-api-client"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
