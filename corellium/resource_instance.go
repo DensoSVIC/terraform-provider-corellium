@@ -3,11 +3,15 @@ package corellium
 import (
 	"context"
 	"io"
+	"math/big"
 	"net/http"
 	"time"
 
+<<<<<<< Updated upstream
 	"terraform-provider-corellium/corellium/pkg/api"
 
+=======
+>>>>>>> Stashed changes
 	"github.com/DensoSVIC/go-corellium-api-client"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -15,6 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
+	"terraform-provider-corellium/corellium/pkg/api"
 )
 
 // Ensure the implementation satisfies the expected interfaces.
@@ -65,6 +70,7 @@ type V1InstanceCreatedByModel struct { // TODO: rename to user or use the user m
 }
 
 type V1InstanceBootOptionsModel struct {
+	Cores           types.Number `tfsdk:"cores"`
 	BootArgs        types.String `tfsdk:"boot_args"`
 	RestoreBootArgs types.String `tfsdk:"restore_boot_args"`
 	UDID            types.String `tfsdk:"udid"`
@@ -276,9 +282,15 @@ func (d *CorelliumV1InstanceResource) Schema(_ context.Context, _ resource.Schem
 			},
 			"boot_options": schema.SingleNestedAttribute{
 				Description: "Instance boot options",
+				Optional:    true,
 				Computed:    true,
 				Default:     nil,
 				Attributes: map[string]schema.Attribute{
+					"cores": schema.NumberAttribute{
+						Description: "Instance cores",
+						Optional:    true,
+						Computed:    true,
+					},
 					"boot_args": schema.StringAttribute{
 						Description: "Instance boot args",
 						Computed:    true,
@@ -492,6 +504,20 @@ func (d *CorelliumV1InstanceResource) Create(ctx context.Context, req resource.C
 	i := corellium.NewInstanceCreateOptions(plan.Flavor.ValueString(), plan.Project.ValueString(), plan.OS.ValueString())
 	i.SetName(plan.Name.ValueString())
 	i.SetFwpackage(plan.FWPackage.ValueString())
+
+	BigFloatToFloat32 := func(bf *big.Float) float32 {
+		f, _ := bf.Float32()
+		return f
+	}
+
+	b := corellium.NewInstanceBootOptionsWithDefaults()
+	if plan.BootOptions != nil {
+		if !plan.BootOptions.Cores.IsNull() {
+			b.SetCores(BigFloatToFloat32(plan.BootOptions.Cores.ValueBigFloat()))
+		}
+	}
+	i.SetBootOptions(*b)
+
 	created, r, err := d.client.InstancesApi.V1CreateInstance(auth).InstanceCreateOptions(*i).Execute()
 	if err != nil {
 		if r.StatusCode == http.StatusForbidden {
@@ -615,7 +641,14 @@ func (d *CorelliumV1InstanceResource) Create(ctx context.Context, req resource.C
 		return
 	}
 
+	cores := types.NumberValue(big.NewFloat(0))
+	if plan.BootOptions != nil {
+		if !plan.BootOptions.Cores.IsNull() {
+			cores = types.NumberValue(plan.BootOptions.Cores.ValueBigFloat())
+		}
+	}
 	plan.BootOptions = &V1InstanceBootOptionsModel{
+		Cores:           cores,
 		BootArgs:        types.StringValue(instance.BootOptions.GetBootArgs()),
 		RestoreBootArgs: types.StringValue(instance.BootOptions.GetRestoreBootArgs()),
 		UDID:            types.StringValue(instance.BootOptions.GetUdid()),
@@ -740,6 +773,7 @@ func (d *CorelliumV1InstanceResource) Read(ctx context.Context, req resource.Rea
 	}
 
 	state.BootOptions = &V1InstanceBootOptionsModel{
+		Cores:           types.NumberValue(big.NewFloat(float64(instance.BootOptions.GetCores()))),
 		BootArgs:        types.StringValue(instance.BootOptions.GetBootArgs()),
 		RestoreBootArgs: types.StringValue(instance.BootOptions.GetRestoreBootArgs()),
 		UDID:            types.StringValue(instance.BootOptions.GetUdid()),
