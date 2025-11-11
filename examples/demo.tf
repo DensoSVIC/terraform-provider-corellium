@@ -18,7 +18,7 @@ terraform {
     # https://developer.hashicorp.com/terraform/language/settings#specifying-provider-requirements
     # https://developer.hashicorp.com/terraform/language/providers/requirements#requiring-providers
     corellium = {
-      source = "github.com/aimoda/corellium"
+      source = "github.com/DensoSVIC/corellium"
       # The global source address for the provider you intend to use, such as hashicorp/aws.
       #
       # https://developer.hashicorp.com/terraform/language/providers/requirements#source

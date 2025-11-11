@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/aimoda/go-corellium-api-client"
+	"github.com/DensoSVIC/go-corellium-api-client"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -37,7 +37,7 @@ type V1SnapshotStatusModel struct {
 }
 
 // V1SnapshotModel maps the resource schema data.
-// https://github.com/aimoda/go-corellium-api-client/blob/main/docs/Snapshot.md
+// https://github.com/DensoSVIC/go-corellium-api-client/blob/main/docs/Snapshot.md
 type V1SnapshotModel struct {
 	// Id is the snapshot id.
 	Id types.String `tfsdk:"id"`

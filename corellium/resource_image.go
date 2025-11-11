@@ -9,7 +9,7 @@ import (
 
 	"terraform-provider-corellium/corellium/pkg/api"
 
-	"github.com/aimoda/go-corellium-api-client"
+	"github.com/DensoSVIC/go-corellium-api-client"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -34,7 +34,7 @@ type CorelliumV1ImageResource struct {
 }
 
 // V1ImageModel maps the resource schema data.
-// https://github.com/aimoda/go-corellium-api-client/blob/main/docs/Image.md
+// https://github.com/DensoSVIC/go-corellium-api-client/blob/main/docs/Image.md
 type V1ImageModel struct {
 	Status types.String `tfsdk:"status"`
 	// Id is the image ID.
