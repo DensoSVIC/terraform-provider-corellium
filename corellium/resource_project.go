@@ -174,10 +174,12 @@ func (d *CorelliumV1ProjectResource) Schema(_ context.Context, _ resource.Schema
 					},
 					"instances": schema.NumberAttribute{
 						Description: "Project quota instances",
+						Optional:    true,
 						Computed:    true,
 					},
 					"ram": schema.NumberAttribute{
 						Description: "Project quota ram",
+						Optional:    true,
 						Computed:    true,
 					},
 				},
@@ -268,6 +270,10 @@ func (d *CorelliumV1ProjectResource) Schema(_ context.Context, _ resource.Schema
 						},
 					},
 				},
+			},
+			"vpn_config": schema.StringAttribute{
+				Description: "Project VPN config",
+				Computed:    true,
 			},
 			"created_at": schema.StringAttribute{
 				Description: "Project created at",
