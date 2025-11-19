@@ -629,6 +629,7 @@ func (d *CorelliumV1InstanceResource) Create(ctx context.Context, req resource.C
 	plan.UserTask = types.StringValue(instance.GetUserTask())
 	plan.TaskState = types.StringValue(instance.GetTaskState())
 	plan.Error = types.StringValue(instance.GetError())
+	plan.WifiIP = types.StringValue(instance.GetWifiIp())
 
 	additionalTags, diags := types.ListValueFrom(ctx, types.StringType, instance.BootOptions.GetAdditionalTags())
 	resp.Diagnostics.Append(diags...)
