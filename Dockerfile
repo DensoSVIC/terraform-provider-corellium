@@ -8,3 +8,4 @@ FROM hashicorp/terraform:latest
 
 COPY --from=builder /go/bin/ /go/bin/
 COPY .terraformrc /root/
+COPY .terraformrc /
